@@ -1,0 +1,12 @@
+{
+	"disableAutoUpdate": false,
+	"name": "swiper",
+	"author": "ry",
+	"description": "...",
+	"options": {
+		"niceName": "Swiper",
+		"reloadable": true
+	},
+	"servers": ["https://raw.githubusercontent.com/Rycoz/swiper/master/"],
+	"supportUrl": "https://github.com/Rycoz/swiper/issues"
+}
