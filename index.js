@@ -4,53 +4,42 @@ exports.NetworkMod = function Swiper(mod) {
 
 	let hooks = [],
 	enabled = false,
-	insidemap = false,
 	toParty = false,
 	uNames = [],
 	count = [];
 
 	mod.game.on('enter_game', () => {
 		uNames[mod.game.me.gameId] = mod.game.me.name
-		count[uNames[mod.game.me.gameId]] = 0
 	});
-
 
 	mod.hook('S_LOAD_TOPO', 3, (event) => {
 		if (event.zone === mapID){
-			insidemap = true;
-			
-			load()
+			load();
 		}else{
-			insidemap = false;
-			unload()
+			unload();
 		}
 	});
-	
-function load(){
+
+	function load(){
 		hook('S_SPAWN_USER', 17, event => {
-			if(!enabled) return
-			if(!insidemap) return
 			uNames[event.gameId] = event.name
-			count[uNames[event.gameId]] = 0
-			//mod.log(uNames)
 		});
  
 		hook('S_EACH_SKILL_RESULT', 14 , event =>{
 			if(!enabled) return
-			if(!insidemap) return
 			if(event.reaction['push']){
-				count[uNames[event.target]] +=1;
-
+				//mod.log(event);
+				if(isNaN(count[uNames[event.target]])){
+					count[uNames[event.target]] = 1;
+				}else{
+					count[uNames[event.target]] +=1;
+				}
+				
 				sendMessage(uNames[event.target] + ' got swiped (' + count[uNames[event.target]] + ')');
-				//mod.log(event)
 			}
 			
 		})
 	};
-
-	function hook() {
-		hooks.push(mod.hook(...arguments));
-	}
 
 	function unload() {
 		if (hooks.length) {
@@ -59,8 +48,11 @@ function load(){
 		}
 	}
 
-	function sendMessage(msg){
+	function hook() {
+		hooks.push(mod.hook(...arguments));
+	}
 
+	function sendMessage(msg){
 		if(toParty){
 			mod.toServer('C_CHAT', 1, {
 			channel: 21, //21 = p-notice, 1 = party, 2 = guild
@@ -86,7 +78,12 @@ function load(){
 				mod.command.message('enabled');
 			}
 		},
-		list() {mod.log(count)}
+		list() {
+			mod.log(count)
+		},
+		clear() {
+			count = [];	
+		}
 		
 	})
 }
