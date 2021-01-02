@@ -24,20 +24,20 @@ exports.NetworkMod = function Swiper(mod) {
 		hook('S_SPAWN_USER', 17, event => {
 			uNames[event.gameId] = event.name
 		});
- 
+
 		hook('S_EACH_SKILL_RESULT', 14 , event =>{
 			if(!enabled) return
-			if(event.reaction['push']){
-				//mod.log(event);
+			if(event.reaction['push'] && (event.skill['id']==1137 || event.skill['id']==1136) && !event.superArmor){
+				mod.log(event);
 				if(isNaN(count[uNames[event.target]])){
 					count[uNames[event.target]] = 1;
 				}else{
 					count[uNames[event.target]] +=1;
 				}
-				
+
 				sendMessage(uNames[event.target] + ' got swiped (' + count[uNames[event.target]] + ')');
 			}
-			
+
 		})
 	};
 
@@ -82,8 +82,8 @@ exports.NetworkMod = function Swiper(mod) {
 			mod.log(count)
 		},
 		clear() {
-			count = [];	
+			count = [];
 		}
-		
+
 	})
 }
