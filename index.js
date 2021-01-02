@@ -28,7 +28,7 @@ exports.NetworkMod = function Swiper(mod) {
 		hook('S_EACH_SKILL_RESULT', 14 , event =>{
 			if(!enabled) return
 			if(event.reaction['push'] && (event.skill['id']==1137 || event.skill['id']==1136) && !event.superArmor){
-				mod.log(event);
+				//mod.log(event);
 				if(isNaN(count[uNames[event.target]])){
 					count[uNames[event.target]] = 1;
 				}else{
